@@ -1,0 +1,7 @@
+{
+  "name": "H5EQ",
+  "version": "0.0.1",
+  "devDependencies": {
+    "express": "^4.16.3"
+  }
+}

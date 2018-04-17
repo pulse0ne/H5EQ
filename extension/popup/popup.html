@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="popup.css">
+    <script src="../lib/webextension-polyfill/browser-polyfill.js"></script>
+    <script src="popup.js"></script>
+</head>
+<body>
+<div id="popup-content">
+    <div class="checkbox-container">
+        <div class="switch">
+            <input id="eq-enabled-checkbox" type="checkbox" title="Enable/Disable">
+            <label for="eq-enabled-checkbox"></label>
+        </div>
+    </div>
+    <div class="hz-label">Hz</div>
+    <div class="eq-bank">
+        <div class="slider-wrapper">
+            <span class="band-label">40</span>
+            <input id="eq-40hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="40 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">64</span>
+            <input id="eq-64hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="64 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">125</span>
+            <input id="eq-125hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="125 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">250</span>
+            <input id="eq-250hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="250 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">500</span>
+            <input id="eq-500hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="500 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">1k</span>
+            <input id="eq-1000hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="1000 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">2k</span>
+            <input id="eq-2000hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="2000 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">4k</span>
+            <input id="eq-4000hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="4000 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">8k</span>
+            <input id="eq-8000hz" type="range" min="-20" max="20" value="0.0" step="0.5" title="8000 hertz">
+        </div>
+        <div class="slider-wrapper">
+            <span class="band-label">16k</span>
+            <input id="eq-16000hz" type="range" min="-20" max="20" value="0.0" step="0.5"  title="16000 hertz">
+        </div>
+    </div>
+    <div class="gain-bank">
+        <div id="gain-40hz" class="eq-gain">0.0</div>
+        <div id="gain-64hz" class="eq-gain">0.0</div>
+        <div id="gain-125hz" class="eq-gain">0.0</div>
+        <div id="gain-250hz" class="eq-gain">0.0</div>
+        <div id="gain-500hz" class="eq-gain">0.0</div>
+        <div id="gain-1000hz" class="eq-gain">0.0</div>
+        <div id="gain-2000hz" class="eq-gain">0.0</div>
+        <div id="gain-4000hz" class="eq-gain">0.0</div>
+        <div id="gain-8000hz" class="eq-gain">0.0</div>
+        <div id="gain-16000hz" class="eq-gain">0.0</div>
+    </div>
+    <div class="gain-label">Gain</div>
+</div>
+</body>
+</html>
