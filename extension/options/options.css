@@ -1,0 +1,43 @@
+body {
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    padding: 4px;
+}
+
+#options-content {
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.presets-container {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.preset-entry {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.preset-entry:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.delete-button {
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    color: red;
+    background: transparent;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.delete-button:hover {
+    background: red;
+    color: #efefef;
+}

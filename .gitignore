@@ -13,5 +13,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 
-# Test file
-/dev/assets/test.ogg
+# built files
+web-ext-artifacts/

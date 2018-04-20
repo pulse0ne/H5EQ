@@ -1,7 +1,17 @@
 {
   "name": "H5EQ",
   "version": "0.0.1",
+  "author": "Tyler Snedigar <snedigart@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "git": "https://github.com/pulse0ne/H5EQ"
+  },
+  "scripts": {
+    "test-server": "node dev/main.js",
+    "dev": "web-ext run -s extension/"
+  },
   "devDependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "web-ext": "2.6.0"
   }
 }

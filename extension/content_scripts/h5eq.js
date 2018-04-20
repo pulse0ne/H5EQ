@@ -6,76 +6,66 @@
             UPDATE_STATE: 'update::state',
             UPDATE_GAIN: 'update::gain',
             UPDATE_ENABLED: 'update::enabled',
+            UPDATE_PRESET: 'update::preset',
             SET_GAIN: 'set::gain',
-            SET_ENABLED: 'set::enabled'
+            SET_ENABLED: 'set::enabled',
+            SET_PRESET: 'set::preset',
+            SAVE_PRESET: 'save::preset',
+            DELETE_PRESET: 'delete::preset'
         };
-        const AudioCx = (window.AudioContext || window.webkitAudioContext);
-        const audioContexts = [];
+        const WebAudioContext = (window.AudioContext || window.webkitAudioContext);
+        const pipelines = [];
 
-        const createContextEntry = (mediaElement) => {
-            const cx = {};
-            cx.context = new AudioCx();
-            cx.source = cx.context.createMediaElementSource(mediaElement);
-            cx.filters = [];
-            cx.source.connect(cx.context.destination);
-            [40, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000].forEach((freq, ix, arr) => {
-                const filter = cx.context.createBiquadFilter();
+        const setEnabled = (enabled) => {
+            pipelines.forEach(cx => {
+                cx.source.disconnect();
+                cx.source.connect(enabled ? cx.filters[0] : cx.context.destination);
+            });
+        };
+
+        const createPipelineForElement = (element, gains) => {
+            const context = new WebAudioContext();
+            const source = context.createMediaElementSource(element);
+            const filters = [];
+            source.connect(context.destination);
+            const numericalFreqs = Object.keys(gains).map(g => parseFloat(g));
+            numericalFreqs.sort();
+            numericalFreqs.forEach((freq, ix, arr) => {
+                const filter = context.createBiquadFilter();
                 filter.frequency.value = freq;
                 filter.Q.value = 1.0;
-                filter.gain.value = 0.0;
+                filter.gain.value = gains[String(freq)];
                 filter.type = ix === 0 ? 'lowshelf' : ix === arr.length - 1 ? 'highshelf' : 'peaking';
-                cx.filters.push(filter);
-                if (ix > 0) cx.filters[ix - 1].connect(filter);
-                if (ix === arr.length - 1) filter.connect(cx.context.destination);
+                filters.push(filter);
+                if (ix > 0) filters[ix - 1].connect(filter);
+                if (ix === arr.length - 1) filter.connect(context.destination);
             });
-            audioContexts.push(cx);
+            pipelines.push({ context, source, filters });
         };
 
-        const applyGainToContextEntry = (entry, frequency, gain) => {
+        const applyGainToPipelineEntry = (entry, frequency, gain) => {
             const filter = entry.filters.find(f => String(f.frequency.value) === frequency);
             if (filter) {
                 filter.gain.value = gain;
             }
         };
 
-        const setEnabled = (enabled) => {
-            audioContexts.forEach(cx => {
-                cx.source.disconnect();
-                cx.source.connect(enabled ? cx.filters[0] : cx.context.destination);
-            });
-        };
+        browser.runtime.sendMessage({ type: MESSAGE_KEYS.QUERY_STATE }).then((state) => {
+            let mediaElements = ([...document.querySelectorAll('audio')]).concat([...document.querySelectorAll('video')]);
+            mediaElements.forEach(element => createPipelineForElement(element, state.gains));
+            setEnabled(state.enabled);
 
-        let audioElements = document.querySelectorAll('audio') || [];
-        let videoElements = document.querySelectorAll('video') || [];
-        if (!audioElements.length && !videoElements.length) {
-            console.log('no audio/video elements to equalize');
-        } else {
-            let enabled = false;
-
-            audioElements.forEach(createContextEntry);
-            videoElements.forEach(createContextEntry);
-
-            let port = browser.runtime.connect({ name: 'h5eq' });
+            const port = browser.runtime.connect({ name: 'h5eq' });
             port.onMessage.addListener(msg => {
-                if (msg.type === MESSAGE_KEYS.UPDATE_STATE) {
-                    enabled = msg.state.enabled;
-                    Object.keys(msg.state.gains).forEach(freq => {
-                        const gain = msg.state.gains[freq];
-                        audioContexts.forEach(cx => applyGainToContextEntry(cx, freq, gain));
-                    });
-                    setEnabled(enabled);
-                } else if (msg.type === MESSAGE_KEYS.UPDATE_GAIN) {
-                    audioContexts.forEach(cx => applyGainToContextEntry(cx, msg.frequency, msg.gain));
-                } else if (msg.type === MESSAGE_KEYS.UPDATE_ENABLED) {
+                switch(msg.type) {
+                case MESSAGE_KEYS.UPDATE_GAIN:
+                    pipelines.forEach(pipeline => applyGainToPipelineEntry(pipeline, msg.frequency, msg.gain));
+                    break;
+                case MESSAGE_KEYS.UPDATE_ENABLED:
                     setEnabled(msg.enabled);
+                    break;
                 }
             });
-
-            browser.runtime.sendMessage({ type: 'TEST' }).then(function (res) {
-                console.log(res);
-            });
-
-            port.postMessage({ type: MESSAGE_KEYS.QUERY_STATE });
-        }
+        });
     }, 250);
 })();
