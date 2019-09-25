@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "H5EQ",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Tyler Snedigar <snedigart@gmail.com>",
     "homepage_url": "https://github.com/pulse0ne/H5EQ",
     "description": "HTML5 equalization",
