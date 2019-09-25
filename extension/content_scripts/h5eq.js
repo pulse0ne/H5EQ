@@ -68,7 +68,6 @@
         }
 
         domMutated () {
-            console.log('mutated');
             const mediaElements = ([...document.body.querySelectorAll('video')])
                 .concat([...document.body.querySelectorAll('audio')]);
             mediaElements
