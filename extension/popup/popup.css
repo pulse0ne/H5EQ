@@ -185,7 +185,7 @@ body {
     box-shadow: 0 0 2px #5cb9f4;
 }
 
-.gain-bank .eq-gain {
+#gain-bank .eq-gain {
     width: 20px;
     padding: 0;
     text-align: center;

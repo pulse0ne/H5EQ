@@ -2,9 +2,6 @@
     const MESSAGE_KEYS = {
         QUERY_STATE: 'query::state',
         UPDATE_STATE: 'update::state',
-        UPDATE_GAIN: 'update::gain',
-        UPDATE_ENABLED: 'update::enabled',
-        UPDATE_PRESET: 'update::preset',
         SET_GAIN: 'set::gain',
         SET_ENABLED: 'set::enabled',
         SET_PRESET: 'set::preset',
@@ -38,7 +35,7 @@
         input.min = '-20.0';
         input.max = '20.0';
         input.value = String(gain.toFixed(1));
-        input.step = '0.5';
+        input.step = '0.1';
         input.title = `${frequency} hertz`;
         slider.appendChild(input);
 

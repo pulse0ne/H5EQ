@@ -3,29 +3,29 @@ const contentScripts = [];
 const state = {
     enabled: true,
     gains: {
-        '40': 0.0,
-        '64': 0.0,
-        '125': 0.0,
-        '250': 0.0,
-        '500': 0.0,
-        '1000': 0.0,
-        '2000': 0.0,
-        '4000': 0.0,
-        '8000': 0.0,
-        '16000': 0.0
+        40: 0.0,
+        64: 0.0,
+        125: 0.0,
+        250: 0.0,
+        500: 0.0,
+        1000: 0.0,
+        2000: 0.0,
+        4000: 0.0,
+        8000: 0.0,
+        16000: 0.0
     },
     presets: {
         'Flat': {
-            '40': 0.0,
-            '64': 0.0,
-            '125': 0.0,
-            '250': 0.0,
-            '500': 0.0,
-            '1000': 0.0,
-            '2000': 0.0,
-            '4000': 0.0,
-            '8000': 0.0,
-            '16000': 0.0
+            40: 0.0,
+            64: 0.0,
+            125: 0.0,
+            250: 0.0,
+            500: 0.0,
+            1000: 0.0,
+            2000: 0.0,
+            4000: 0.0,
+            8000: 0.0,
+            16000: 0.0
         }
     },
     selectedPreset: ''
@@ -45,9 +45,6 @@ const STORAGE_KEY = '::state';
 const MESSAGE_KEYS = {
     QUERY_STATE: 'query::state',
     UPDATE_STATE: 'update::state',
-    UPDATE_GAIN: 'update::gain',
-    UPDATE_ENABLED: 'update::enabled',
-    UPDATE_PRESET: 'update::preset',
     SET_GAIN: 'set::gain',
     SET_ENABLED: 'set::enabled',
     SET_PRESET: 'set::preset',
@@ -112,16 +109,16 @@ storagePromise.then(() => {
         port.onMessage.addListener(msg => {
             switch (msg.type) {
             case MESSAGE_KEYS.QUERY_STATE:
-                port.postMessage({ type: MESSAGE_KEYS.UPDATE_STATE, state: state });
+                port.postMessage({ type: MESSAGE_KEYS.UPDATE_STATE, state });
                 break;
             case MESSAGE_KEYS.SET_GAIN:
                 state.gains[msg.frequency] = msg.gain;
-                broadcastMessage({ type: MESSAGE_KEYS.UPDATE_GAIN, frequency: msg.frequency, gain: msg.gain });
+                broadcastMessage({ type: MESSAGE_KEYS.UPDATE_STATE, state });
                 break;
             case MESSAGE_KEYS.SET_ENABLED:
                 state.enabled = msg.enabled;
                 browser.browserAction.setIcon({ path: state.enabled ? iconsSelected : icons });
-                broadcastMessage({ type: MESSAGE_KEYS.UPDATE_ENABLED, enabled: state.enabled });
+                broadcastMessage({ type: MESSAGE_KEYS.UPDATE_STATE, state });
                 break;
             default:
                 console.error('Unrecognized message:', msg);
